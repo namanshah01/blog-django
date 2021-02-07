@@ -11,8 +11,8 @@ class Profile(models.Model):
 	def __str__(self):
 		return self.user.username
 	
-	def save(self, *args, **kwargs):
-		super().save(*args, **kwargs)
+	def save(self):
+		super().save()
 		img = Image.open(self.image.path)
 		if img.width>300 or img.height>300:
 			output_size = (300, 300)

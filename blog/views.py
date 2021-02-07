@@ -1,8 +1,5 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.http import HttpResponse
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.models import User
 from .models import Post
 
 # Create your views here.
@@ -11,57 +8,26 @@ def home(request):
 	context = {'posts': Post.objects.all()}
 	return render(request, 'blog/home.html', context)
 
-class PostListView(ListView):
-	model = Post
-	template_name = 'blog/home.html'
-	context_object_name = 'posts'
-	ordering = ['-time']
-	paginate_by = 5
-
-class UserPostListView(ListView):
-	model = Post
-	template_name = 'blog/user_posts.html'
-	context_object_name = 'posts'
-	paginate_by = 5
-
-	def get_queryset(self):
-		user = get_object_or_404(User, username=self.kwargs.get('username'))
-		return Post.objects.filter(author=user).order_by('-time')
-
-class PostDetailView(DetailView):
-	model = Post
-
-class PostCreateView(LoginRequiredMixin, CreateView):
-	model = Post
-	fields = ['title', 'content']
-
-	def form_valid(self, form):
-		form.instance.author = self.request.user
-		return super().form_valid(form)
-
-class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-	model = Post
-	fields = ['title', 'content']
-
-	def form_valid(self, form):
-		form.instance.author = self.request.user
-		return super().form_valid(form)
-	
-	def test_func(self):
-		post = self.get_object()
-		if post.author == self.request.user:
-			return True
-		return False
-
-class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-	model = Post
-	success_url = '/blog/'
-
-	def test_func(self):
-		post = self.get_object()
-		if post.author == self.request.user:
-			return True
-		return False
-
 def about(request):
 	return render(request, 'blog/about.html', {'title': 'Blog - About Page'})
+
+# dummy_data = [
+# 	{
+# 		'title': 'Coffee Jelly',
+# 		'author': 'Kusuo Saiki',
+# 		'content': 'Some content for the first blog. Yare yare',
+# 		'time': 'Dec 2020',
+# 	},
+# 	{
+# 		'title': 'Dark Reunion',
+# 		'author': 'Shun Kaido',
+# 		'content': 'I sense a dark energy is coming for us',
+# 		'time': 'Jan 2021',
+# 	},
+# 	{
+# 		'title': 'Ramen',
+# 		'author': 'Riki Nendo',
+# 		'content': 'Oh aibo, ramen ikoze?',
+# 		'time': 'Nov 2020',
+# 	}
+# ]
