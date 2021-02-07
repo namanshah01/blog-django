@@ -21,5 +21,6 @@ Can add:
 - UI imporvemnets
 
 ## Note:
-master Branch - Class Based Views (fully complete)
-<br>fbv Branch - Function Based Views (not fully complete)
+The 'fbv' branch is not meant to be merged into the master branch, it is just a different approach to the app using 'function based views'. However, the main changes were made in the master branch with 'class based views'
+- master Branch - Class Based Views
+- fbv Branch - Function Based Views
